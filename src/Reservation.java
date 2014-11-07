@@ -50,7 +50,6 @@ public class Reservation implements Comparable<Reservation>{
 		this.userID = userID;
 	}
 
-	@Override
 	public int compareTo(Reservation r) {
 		if(start.after(r.getStart()))
 			return 1;
