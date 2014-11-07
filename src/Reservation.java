@@ -1,9 +1,10 @@
 import java.util.*;
 public class Reservation implements Comparable<Reservation>{
 	private GregorianCalendar start, end;
-	private int roomID, userID;
+	private int roomID;
+	private User user;
 	
-	public Reservation(GregorianCalendar start, GregorianCalendar end, int roomID, int userID)
+	public Reservation(GregorianCalendar start, GregorianCalendar end, int roomID, User user)
 			throws Exception{
 		GregorianCalendar now = new GregorianCalendar();
 		
@@ -15,7 +16,7 @@ public class Reservation implements Comparable<Reservation>{
 		this.setStart(start);
 		this.setEnd(end);
 		this.setRoomID(roomID);
-		this.setUserID(userID);
+		this.setUser(user);
 	}
 
 	public GregorianCalendar getStart() {
@@ -42,15 +43,14 @@ public class Reservation implements Comparable<Reservation>{
 		this.roomID = roomID;
 	}
 
-	public int getUserID() {
-		return userID;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserID(int userID) {
-		this.userID = userID;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	@Override
 	public int compareTo(Reservation r) {
 		if(start.after(r.getStart()))
 			return 1;

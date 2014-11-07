@@ -20,8 +20,13 @@ public class Room {
 		else
 			return 200;
 	}
-	public ArrayList<Reservation> getReservationOnDay(GregorianCalendar date){
-		return reservationList;
+	/**
+	 * Return the reservation on the day defined.
+	 * @param date
+	 * @return
+	 */
+	public Reservation getReservationOnDay(GregorianCalendar date){
+		return null;
 	}
 	public boolean hasCollision(GregorianCalendar start, GregorianCalendar end){
 		Iterator<Reservation> iter = reservationList.iterator();
