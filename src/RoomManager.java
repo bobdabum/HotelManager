@@ -9,19 +9,24 @@ public class RoomManager {
 	
 	public RoomManager(ArrayList<Room> a){
 		this.a = a;
+		listeners = new ArrayList<ChangeListener>();
 	}
 
-	public ArrayList<Room> getRoom() {
+	public ArrayList<Room> getRoomList() {
 		return a;
 	}
 
-	public void setRoom(ArrayList<Room> a) {
-		this.a = a;
+	public ArrayList<Reservation> getReservations() {
+		return r;
 	}
 	
 	public void addReservation(ArrayList<Reservation> r){
 		this.r = r;
 	}
+	
+	public int test(){
+		return a.get(2).getID();
+	}	
 	
 	/**
 	 * Attach a listener to the Model
@@ -36,7 +41,7 @@ public class RoomManager {
 	 * @param location the index of the field to change
 	 * @param value the new value
 	 */
-	public void update(int location, double value) {
+	public void update() {
 		for (ChangeListener l : listeners) {
 			l.stateChanged(new ChangeEvent(this));
 		}
