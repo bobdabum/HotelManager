@@ -287,8 +287,6 @@ public class ManagerFrame{
             rows.setEditable(false);
             Font font = new Font("Arial", Font.BOLD, 12);
             rows.setFont(font);
-            Color c = new Color(0, 68, 124);
-            rows.setForeground(c);
             
             textFill = " Room: " + tempRes.get(i).getRoomID() + "  \n User: " +
 					tempRes.get(i).getUserID() + "  \n Price: " + 
