@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -26,6 +27,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import java.text.DateFormatSymbols;
@@ -55,9 +57,15 @@ public class ManagerFrame{
 	 */
 	@SuppressWarnings("serial")
 	public ManagerFrame(final RoomManager m){	
+		try { 
+		    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+		
 		frame = new JFrame("Calendar");	
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setBounds(20, 20, 630, 355);
+		frame.setBounds(20, 20, 630, 350);
 		Container pane = frame.getContentPane();
 		pane.setLayout(null);
 		frame.setResizable(false);
@@ -108,10 +116,10 @@ public class ManagerFrame{
 		CalendarTable.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		CalendarTable.getTableHeader().setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		CalendarPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));			
-		CalendarPanel.setBounds(3, 4, 320, 318);
-		monthDropDown.setBounds(20, 25, 100, 25);
-		yearDropDown.setBounds(200, 25, 100, 25);
-		table.setBounds(12, 62, 295, 245);
+		CalendarPanel.setBounds(3, 4, 320, 312);
+		monthDropDown.setBounds(20, 13, 100, 25);
+		yearDropDown.setBounds(200, 13, 100, 25);
+		table.setBounds(12, 50, 295, 253);
 		
 		GregorianCalendar tempCal = new GregorianCalendar();
 		day = tempCal.get(GregorianCalendar.DAY_OF_MONTH);
@@ -141,9 +149,13 @@ public class ManagerFrame{
 				CalendarTabler.setValueAt("", i, j);
 			}
 		}
+		Calendar todayCal = new GregorianCalendar();
+		int todayDay = todayCal.get(Calendar.DAY_OF_MONTH);
+		
 		for (int i=1; i<=daysInMonth; i++){
 			int row = (i + dayOfWeek-2) / 7;
 			int column = (i + dayOfWeek - 2) % 7;
+			if (i == todayDay) CalendarTable.changeSelection(row, column, false, false); 
 			CalendarTabler.setValueAt(" " + i, row, column);
 		}
 
@@ -156,15 +168,11 @@ public class ManagerFrame{
 		};
 		CalendarTable.getSelectionModel().addListSelectionListener(ls);
 		CalendarTable.getColumnModel().getSelectionModel() .addListSelectionListener(ls);
-		
-		SwingUtilities.invokeLater(new Runnable(){public void run(){
-		    CalendarTable.repaint();
-		}});
 	}
 	
 	/**
 	 * update calendar
-	 */
+	 */ 
 	public void updateCalendar(){
 		String selectedMonth = (String) monthDropDown.getSelectedItem();
 		Calendar cal = Calendar.getInstance();
@@ -191,6 +199,35 @@ public class ManagerFrame{
 			int column = (i + dayOfWeek - 2) % 7;
 			CalendarTabler.setValueAt(" " + i, row, column);
 		}
+		CalendarTable.setDefaultRenderer(CalendarTable.getColumnClass(0), new DecorateTable());
+	}
+	
+	@SuppressWarnings("serial")
+	class DecorateTable extends DefaultTableCellRenderer{
+		public Component getTableCellRendererComponent (JTable t, Object o, boolean selected, boolean focus, int r, int c){
+			setBorder(null);
+			setForeground(Color.black);
+			super.getTableCellRendererComponent(t, o, selected, focus, r, c);
+			if(c == 0 || c == 6) setBackground(new Color(230, 230, 255));
+			else setBackground(new Color(255, 255, 255));
+			
+			GregorianCalendar today = new GregorianCalendar();
+			String hex = (String) o;			
+			
+			if (selected) {
+                setForeground(CalendarTable.getSelectionForeground());
+                super.setBackground(Color.LIGHT_GRAY);
+            }
+            
+            if (hex != "" && hex != null){
+				if (Integer.parseInt(hex.substring(1)) == today.get(Calendar.DAY_OF_MONTH) &&
+					year == today.get(Calendar.YEAR) && month == today.get(Calendar.MONTH) + 1){
+					setBackground(new Color(150, 200, 200));
+			  }
+			}
+			
+			return this;  
+		}
 	}
 	
 	/**
@@ -199,7 +236,7 @@ public class ManagerFrame{
 	public void displayFrame(){
         frame.getContentPane().setLayout(null);
 		JScrollPane scroller = new JScrollPane();
-        scroller.setBounds(330, 4, 285, 317);
+        scroller.setBounds(330, 4, 285, 314);
         frame.getContentPane().add(scroller);
         
         JPanel borderPanel = new JPanel();
@@ -268,6 +305,6 @@ public class ManagerFrame{
 				if(a.getRoomID() < b.getRoomID()) return -1;
 				else return 1;
 			}
-		};
+		}; 
 	}
 }
