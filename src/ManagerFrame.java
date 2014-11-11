@@ -1,10 +1,16 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -12,6 +18,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -30,7 +37,7 @@ import javax.swing.*;
 
 public class ManagerFrame{
 	JFrame frame;
-	JPanel CalendarPanel;
+	JPanel CalendarPanel, panel;
 	JTable CalendarTable;
 	DefaultTableModel CalendarTabler;  
 	JSpinner  yearDropDown;
@@ -55,7 +62,7 @@ public class ManagerFrame{
 		pane.setLayout(null);
 		frame.setResizable(false);
 		frame.setVisible(true);
-
+		
 		rooms = m.getRoomList();
 		reservations = m.getReservations();
 		rm = m;
@@ -106,10 +113,10 @@ public class ManagerFrame{
 		yearDropDown.setBounds(200, 25, 100, 25);
 		table.setBounds(12, 62, 295, 245);
 		
-		GregorianCalendar calendar = new GregorianCalendar();
-		day = calendar.get(GregorianCalendar.DAY_OF_MONTH);
-		month = calendar.get(GregorianCalendar.MONTH);
-		year = calendar.get(GregorianCalendar.YEAR);
+		GregorianCalendar tempCal = new GregorianCalendar();
+		day = tempCal.get(GregorianCalendar.DAY_OF_MONTH);
+		month = tempCal.get(GregorianCalendar.MONTH);
+		year = tempCal.get(GregorianCalendar.YEAR);
 		
 		String[] headers = {"S", "M", "T", "W", "T", "F", "S"};
 		for (int i=0; i<7; i++){
@@ -143,19 +150,16 @@ public class ManagerFrame{
 		ListSelectionListener ls = new ListSelectionListener(){
 			public void valueChanged(ListSelectionEvent e) {
 				if(e.getValueIsAdjusting() == false){
-					int x = CalendarTable.getSelectedRow();
-					int y = CalendarTable.getSelectedColumn();
-					String selected = (String) CalendarTable.getValueAt(x, y);
-					int selectedInt;
-					if(selected != "") selectedInt = Integer.parseInt(selected.substring(1));
-					else selectedInt = 0;
-					textFill = "TESTING: " + selected;
-					textFrame();
+					displayFrame();
 				}
 			}
 		};
 		CalendarTable.getSelectionModel().addListSelectionListener(ls);
 		CalendarTable.getColumnModel().getSelectionModel() .addListSelectionListener(ls);
+		
+		SwingUtilities.invokeLater(new Runnable(){public void run(){
+		    CalendarTable.repaint();
+		}});
 	}
 	
 	/**
@@ -192,13 +196,78 @@ public class ManagerFrame{
 	/**
 	 * the other frame
 	 */
-	public void textFrame(){
-		text = new JTextArea();
-		frame.add(text);
-		text.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		text.setBounds(329, 4 ,290, 318);
-		text.setEditable(false);
+	public void displayFrame(){
+        frame.getContentPane().setLayout(null);
+		JScrollPane scroller = new JScrollPane();
+        scroller.setBounds(330, 4, 285, 317);
+        frame.getContentPane().add(scroller);
+        
+        JPanel borderPanel = new JPanel();
+        JPanel borderPanel2 = new JPanel();
+        
+        scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scroller.setViewportView(borderPanel);
+        borderPanel.setLayout(new BorderLayout(0, 0));
+        scroller.setBorder(BorderFactory.createTitledBorder("Reservations"));
+        borderPanel.add(borderPanel2, BorderLayout.NORTH);
+        borderPanel2.setLayout(new GridLayout(0, 1, 0, 1));
+        
+        int x = CalendarTable.getSelectedRow();
+		int y = CalendarTable.getSelectedColumn();
+		String selected;
+		if(x >= 0 && y >= 0) selected = (String) CalendarTable.getValueAt(x, y);
+		else selected = "";
+		int day;
+		if(selected != "") day = Integer.parseInt(selected.substring(1));
+		else day = 0;
+        
+        GregorianCalendar tempCal = new GregorianCalendar();
+		tempCal.set(Calendar.YEAR, year);
+		tempCal.set(Calendar.MONTH, month - 1);
+		tempCal.set(Calendar.DAY_OF_MONTH, day);
 		
-		text.setText(textFill);
+		ArrayList<Reservation> tempRes = new ArrayList<Reservation>();
+		for(int i = 0; i < reservations.size(); i++){
+			GregorianCalendar start = reservations.get(i).getStart();
+			GregorianCalendar end = reservations.get(i).getEnd();
+			if(start.before(tempCal) || (start.get(Calendar.YEAR) == tempCal.get(Calendar.YEAR) && 
+					start.get(Calendar.DAY_OF_YEAR) == tempCal.get(Calendar.DAY_OF_YEAR))){ 
+				if(end.after(tempCal) || (end.get(Calendar.YEAR) == tempCal.get(Calendar.YEAR) && 
+						end.get(Calendar.DAY_OF_YEAR) == tempCal.get(Calendar.DAY_OF_YEAR)))	
+					tempRes.add(reservations.get(i));
+			}
+		}
+		
+		Collections.sort(tempRes, ReservationComparator());
+		
+        for(int i = 0; i < tempRes.size(); i++) {
+            JTextArea rows = new JTextArea();
+            rows.setBackground(Color.LIGHT_GRAY);
+            rows.setPreferredSize(new Dimension(300,50));
+            borderPanel2.add(rows);
+            rows.setLayout(null);
+            rows.setEditable(false);
+            Font font = new Font("Arial", Font.BOLD, 12);
+            rows.setFont(font);
+            
+            textFill = " Room: " + tempRes.get(i).getRoomID() + "  \n User: " +
+					tempRes.get(i).getUserID() + "  \n Price: " + 
+					rooms.get(tempRes.get(i).getRoomID()).getPrice();
+            
+            rows.setText(textFill);
+            
+            if(i % 2 == 1)
+                rows.setBackground(SystemColor.inactiveCaptionBorder);
+        }
+	}
+	
+	public static Comparator<Reservation> ReservationComparator(){
+		return new Comparator<Reservation>(){
+			public int compare(Reservation a, Reservation b) {
+				if(a.getRoomID() < b.getRoomID()) return -1;
+				else return 1;
+			}
+		};
 	}
 }

@@ -10,6 +10,7 @@ public class RoomManager {
 	public RoomManager(ArrayList<Room> a){
 		this.a = a;
 		listeners = new ArrayList<ChangeListener>();
+		r = new ArrayList<Reservation>();
 	}
 
 	public ArrayList<Room> getRoomList() {
@@ -20,8 +21,8 @@ public class RoomManager {
 		return r;
 	}
 	
-	public void addReservation(ArrayList<Reservation> r){
-		this.r = r;
+	public void addReservation(Reservation res){
+		r.add(res);
 	}
 	
 	public int test(){
