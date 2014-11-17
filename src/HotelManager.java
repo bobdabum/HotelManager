@@ -13,7 +13,6 @@ public class HotelManager {
 		m.add(new Room(3, 1));
 		
 		RoomManager room = new RoomManager(m);
-		Date d = new Date();
 		GregorianCalendar start = new GregorianCalendar();
 		start.set(Calendar.YEAR, 2014);
 		start.set(Calendar.MONTH, 11 - 1);
