@@ -127,7 +127,7 @@ public class ManagerFrame{
 					dayOfWeek = firstDayCalendar.get(GregorianCalendar.DAY_OF_WEEK);
 					firstDayCalendar.add(Calendar.MONTH, -1);
 					daysInPrevMonth = firstDayCalendar.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
-					// displayFrame();
+					displayFrame();
 					updateCalendar();
 				}
 			}
@@ -441,7 +441,22 @@ public class ManagerFrame{
 
 			GregorianCalendar today = new GregorianCalendar();
 			String hex = (String) o;
+			
+			Font font = new Font("Arial", Font.BOLD, 12);
+			setFont(font);
+			Font font2 = new Font("Arial", Font.PLAIN, 12);
+			
+			if (r >= 0 && c >= 0 && (r == 0 && (c < (1 + dayOfWeek - 2) % 7))) {
+				setFont(font2);
+				super.setForeground(Color.GRAY);
+			}
 
+			else if (r >= 0 && c >= 0 && ((r == (daysInMonth + dayOfWeek - 2) / 7 && 
+					(c >= (daysInMonth + dayOfWeek - 2) % 7 + 1)) || (r > (daysInMonth + dayOfWeek - 2) / 7))) {
+				setFont(font2);
+				super.setForeground(Color.GRAY);
+			}
+			
 			if (selected) {
 				setForeground(CalendarTable.getSelectionForeground());
 				super.setBackground(Color.LIGHT_GRAY);
