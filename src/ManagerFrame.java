@@ -42,15 +42,14 @@ public class ManagerFrame{
 	 * @param m
 	 */
 	@SuppressWarnings("serial")
-	public ManagerFrame(final RoomManager m) {
+	public ManagerFrame(final RoomManager m, JFrame frame) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		frame = new JFrame("Calendar");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.frame = frame;
+		frame.setName("Calendar");
 		frame.setBounds(20, 20, 630, 350);
 		Container pane = frame.getContentPane();
 		pane.setLayout(null);
@@ -364,12 +363,13 @@ public class ManagerFrame{
 		int dayOfWeek = firstDayCalendar.get(GregorianCalendar.DAY_OF_WEEK);
 		firstDayCalendar.add(Calendar.MONTH, -1);
 
+		//get info from the selected cell
 		int x = CalendarTable.getSelectedRow();
 		int y = CalendarTable.getSelectedColumn();
 		String selected;
 		if (x >= 0 && y >= 0 && !(x == 0 && (y <= (1 + dayOfWeek - 2) % 7))
-				&& !(x == 5 && (y >= (daysInMonth + dayOfWeek - 2) % 7 + 1))) selected = (String) CalendarTable
-				.getValueAt(x, y);
+				&& !(x == 5 && (y >= (daysInMonth + dayOfWeek - 2) % 7 + 1))) 
+					selected = (String) CalendarTable.getValueAt(x, y);
 		else selected = "";
 		int day;
 		if (selected != "") day = Integer.parseInt(selected.substring(1));
@@ -380,6 +380,7 @@ public class ManagerFrame{
 		tempCal.set(Calendar.MONTH, month - 1);
 		tempCal.set(Calendar.DAY_OF_MONTH, day);
 
+		//make a copy of the reservations that fit the description
 		ArrayList<Reservation> tempRes = new ArrayList<Reservation>();
 		for (int i = 0; i < reservations.size(); i++) {
 			GregorianCalendar start = reservations.get(i).getStart();
@@ -392,10 +393,11 @@ public class ManagerFrame{
 								.get(Calendar.DAY_OF_YEAR))) tempRes.add(reservations.get(i));
 			}
 		}
-
+		
+		//sort the reservations
 		Collections.sort(tempRes, ReservationComparator());
 
-		for (int i = 0; i < tempRes.size(); i++) {
+		for(int i = 0; i < tempRes.size(); i++){
 			JTextArea rows = new JTextArea();
 			rows.setBackground(Color.LIGHT_GRAY);
 			rows.setPreferredSize(new Dimension(300, 50));

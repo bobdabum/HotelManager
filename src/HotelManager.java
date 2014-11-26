@@ -15,17 +15,17 @@ public class HotelManager {
 		RoomManager room = new RoomManager(m);
 		GregorianCalendar start = new GregorianCalendar();
 		start.set(Calendar.YEAR, 2014);
-		start.set(Calendar.MONTH, 11 - 1);
+		start.set(Calendar.MONTH, 12 - 1);
 		start.set(Calendar.DAY_OF_MONTH, 20);
 		GregorianCalendar end = new GregorianCalendar();
 		end.set(Calendar.YEAR, 2014);
-		end.set(Calendar.MONTH, 11 - 1);
+		end.set(Calendar.MONTH, 12 - 1);
 		end.set(Calendar.DAY_OF_MONTH, 30);
 		
 		room.addReservation(new Reservation(start, end, 3, 9210));
 		room.addReservation(new Reservation(start, end, 2, 2389));
 		
-		ManagerFrame f = new ManagerFrame(room);
-		f.displayFrame();
+		HotelView hotel = new HotelView(room);
+		hotel.run();
 	}
 }
