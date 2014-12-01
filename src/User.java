@@ -8,14 +8,15 @@ public class User {
 	public User(ArrayList<Reservation> userReservations,int userID,String name){
 		this.setUserID(userID);
 		this.setName(name);
-		this.setUserReservations(userReservations);
+		this.userReservations = userReservations;
 	}
 	public ArrayList<Reservation> getUserReservations() {
 		return userReservations;
 	}
-	public void setUserReservations(ArrayList<Reservation> userReservations) {
-		this.userReservations = userReservations;
+	public void addReservation(Reservation r){
+		userReservations.add(r);
 	}
+	
 	public int getUserID() {
 		return userID;
 	}

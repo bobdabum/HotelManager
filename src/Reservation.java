@@ -2,21 +2,17 @@ import java.util.*;
 public class Reservation implements Comparable<Reservation>{
 	private GregorianCalendar start, end;
 	private int roomID;
-	private User user;
+	private int userID;
+	private String userName;
+	private RoomCost roomCost;
 	
-	public Reservation(GregorianCalendar start, GregorianCalendar end, int roomID, User user)
-			throws Exception{
-		GregorianCalendar now = new GregorianCalendar();
-		
-		if(start.after(end))
-			throw new Exception("Start date cannot be after end date.");
-		if(now.after(start))
-			throw new Exception("Start date cannot be before today.");
-		
-		this.setStart(start);
-		this.setEnd(end);
-		this.setRoomID(roomID);
-		this.setUser(user);
+	public Reservation(GregorianCalendar start, GregorianCalendar end, int roomID, RoomCost rc, int userID, String userName){		
+		setStart(start);
+		setEnd(end);
+		setRoomID(roomID);
+		setUserID(userID);
+		setUserName(userName);
+		setRoomCost(rc);
 	}
 
 	public GregorianCalendar getStart() {
@@ -43,12 +39,12 @@ public class Reservation implements Comparable<Reservation>{
 		this.roomID = roomID;
 	}
 
-	public User getUser() {
-		return user;
+	public int getUserID() {
+		return userID;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserID(int userID) {
+		this.userID = userID;
 	}
 
 	public int compareTo(Reservation r) {
@@ -58,5 +54,21 @@ public class Reservation implements Comparable<Reservation>{
 			return -1;
 		else
 			return 0;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public RoomCost getRoomCost() {
+		return roomCost;
+	}
+
+	public void setRoomCost(RoomCost roomCost) {
+		this.roomCost = roomCost;
 	}
 }

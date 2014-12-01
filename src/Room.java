@@ -2,23 +2,23 @@ import java.util.*;
 
 public class Room {
 	private int roomID;
-	private int roomType;
+	private RoomCost roomCost;
 	private ArrayList<Reservation> reservationList;
 
-	public Room(int roomID, int roomType){
+	public Room(int roomID, RoomCost roomCost){
 		this.roomID = roomID;
-		this.roomType = roomType;
+		this.roomCost = roomCost;
 		reservationList = new ArrayList<Reservation>();
 	}
 
 	public int getID(){
 		return roomID;
 	}
+	public RoomCost getRoomType(){
+		return roomCost;
+	}
 	public int getPrice(){
-		if(roomType==0)
-			return 80;
-		else
-			return 200;
+		return roomCost.getCost();
 	}
 	/**
 	 * Return the reservation on the day defined.
@@ -44,5 +44,6 @@ public class Room {
 	}
 	public void addReservation(Reservation r){
 		reservationList.add(r);
+		Collections.sort(reservationList);
 	}
 }
