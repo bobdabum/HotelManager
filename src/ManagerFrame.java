@@ -75,6 +75,7 @@ public class ManagerFrame{
 		de.getTextField().setEditable(false);
 		yearDropDown.setEditor(de);
 		
+		//disable the keyboard
 		InputMap input = CalendarTable.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		input.put(KeyStroke.getKeyStroke("DOWN"), "none");
 		input.put(KeyStroke.getKeyStroke("UP"), "none");

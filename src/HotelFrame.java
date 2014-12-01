@@ -27,12 +27,12 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.View;
 
-public class HotelView{
+public class HotelFrame{
 	
 	/**
 	 * The constructor for the view
 	 */
-	public HotelView(RoomManager m){
+	public HotelFrame(RoomManager m){
 		this.m = m;
 		frame = new JFrame("Hotel Reservation");
 		pane = frame.getContentPane();

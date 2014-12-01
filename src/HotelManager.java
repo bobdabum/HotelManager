@@ -25,7 +25,7 @@ public class HotelManager {
 		room.addReservation(new Reservation(start, end, 3, 9210));
 		room.addReservation(new Reservation(start, end, 2, 2389));
 		
-		HotelView hotel = new HotelView(room);
+		HotelFrame hotel = new HotelFrame(room);
 		hotel.run();
 	}
 }
