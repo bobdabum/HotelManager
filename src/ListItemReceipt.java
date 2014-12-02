@@ -6,7 +6,6 @@ import javax.swing.*;
 
 
 public class ListItemReceipt implements ListItemType<Reservation> {
-	@Override
 	public ArrayList<JPanel> populateList(ArrayList<Reservation> myItems, ArrayList<Boolean> isSelected) {
 		ArrayList<JPanel> returnList = new ArrayList<JPanel>();
 		int total = 0;

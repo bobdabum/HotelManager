@@ -12,11 +12,9 @@ public class UserFrame implements RoomListener, ReservationListener{
 		frame = new JFrame();
 		frame.setLayout(new BorderLayout());
 	}
-	@Override
 	public void reservationsChanged(ChangeEvent e) {
 		
 	}
-	@Override
 	public void roomsChanged(ChangeEvent e) {
 		// TODO Auto-generated method stub
 		
