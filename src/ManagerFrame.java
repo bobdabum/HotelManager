@@ -98,7 +98,6 @@ public class ManagerFrame{
 					a.printStackTrace();
 				}
 				month = cal.get(Calendar.MONTH) + 1;
-				
 				updateCalendar();
 			}
 		};
@@ -127,8 +126,8 @@ public class ManagerFrame{
 					dayOfWeek = firstDayCalendar.get(GregorianCalendar.DAY_OF_WEEK);
 					firstDayCalendar.add(Calendar.MONTH, -1);
 					daysInPrevMonth = firstDayCalendar.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
-					displayFrame();
 					updateCalendar();
+					displayFrame();
 				}
 			}
 		};
@@ -464,11 +463,18 @@ public class ManagerFrame{
 				setForeground(CalendarTable.getSelectionForeground());
 				super.setBackground(Color.LIGHT_GRAY);
 			}
-
 			if (hex != "" && hex != null) {
 				if (Integer.parseInt(hex.substring(1)) == today.get(Calendar.DAY_OF_MONTH)
+						&& Integer.parseInt(hex.substring(1)) > 20
+						&& r > 1
 						&& year == today.get(Calendar.YEAR) && month == today.get(Calendar.MONTH) + 1) {
-					setBackground(new Color(150, 200, 200));
+							setBackground(new Color(150, 200, 200));
+				}
+				else if (Integer.parseInt(hex.substring(1)) == today.get(Calendar.DAY_OF_MONTH)
+						&& Integer.parseInt(hex.substring(1)) < 15
+						&& r < 4
+						&& year == today.get(Calendar.YEAR) && month == today.get(Calendar.MONTH) + 1) {
+							setBackground(new Color(150, 200, 200));
 				}
 			}
 
