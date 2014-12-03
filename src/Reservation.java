@@ -4,14 +4,16 @@ public class Reservation implements Comparable<Reservation>{
 	private int roomID;
 	private User user;
 	
+<<<<<<< HEAD
 	public Reservation(GregorianCalendar start, GregorianCalendar end, int roomID, User user)
 			throws Exception{
+=======
+	public Reservation(GregorianCalendar start, GregorianCalendar end, int roomID, int userID) throws Exception{
+>>>>>>> origin/JiHoon
 		GregorianCalendar now = new GregorianCalendar();
 		
-		if(start.after(end))
-			throw new Exception("Start date cannot be after end date.");
-		if(now.after(start))
-			throw new Exception("Start date cannot be before today.");
+		if(start.after(end)) throw new Exception("Start date cannot be after end date.");
+		if(now.after(start)) throw new Exception("Start date cannot be before today.");
 		
 		this.setStart(start);
 		this.setEnd(end);

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import java.util.*;
 
 
@@ -28,4 +29,9 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
+=======
+
+public class User {
+
+>>>>>>> origin/JiHoon
 }
