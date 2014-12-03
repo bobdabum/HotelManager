@@ -86,13 +86,11 @@ public class UserControllerPanel extends JPanel{
 		JButton makeRes = new JButton("Make Reservation");
 		JButton viewRes = new JButton("View/Cancel Reservation");
 		makeRes.addActionListener(new ActionListener(){
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				changeToMakeReservation();
 			}
 		});
 		viewRes.addActionListener(new ActionListener(){
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				changeToViewReservations();
 			}			
@@ -113,7 +111,6 @@ public class UserControllerPanel extends JPanel{
 		final JButton econButton = new JButton("$80");
 
 		luxButton.addActionListener(new ActionListener(){
-			@Override
 			public void actionPerformed(ActionEvent arg0) {					
 				GregorianCalendar start = createCalendar(startField.getText());
 				GregorianCalendar end = createCalendar(endField.getText());
@@ -131,7 +128,6 @@ public class UserControllerPanel extends JPanel{
 			}
 		});
 		econButton.addActionListener(new ActionListener(){
-			@Override
 			public void actionPerformed(ActionEvent arg0) {					
 				GregorianCalendar start = createCalendar(startField.getText());
 				GregorianCalendar end = createCalendar(endField.getText());
@@ -150,10 +146,8 @@ public class UserControllerPanel extends JPanel{
 		});
 
 		startField.getDocument().addDocumentListener(new DocumentListener(){
-			@Override
 			public void changedUpdate(DocumentEvent arg0) {	
 			}
-			@Override
 			public void insertUpdate(DocumentEvent arg0) {					
 				GregorianCalendar start = createCalendar(startField.getText());
 				GregorianCalendar end = createCalendar(endField.getText());
@@ -167,7 +161,6 @@ public class UserControllerPanel extends JPanel{
 					}
 				}
 			}
-			@Override
 			public void removeUpdate(DocumentEvent arg0) {					
 				GregorianCalendar start = createCalendar(startField.getText());
 				GregorianCalendar end = createCalendar(endField.getText());
@@ -182,10 +175,8 @@ public class UserControllerPanel extends JPanel{
 				}	
 			}});
 		endField.getDocument().addDocumentListener(new DocumentListener(){
-			@Override
 			public void changedUpdate(DocumentEvent arg0) {	
 			}
-			@Override
 			public void insertUpdate(DocumentEvent arg0) {					
 				GregorianCalendar start = createCalendar(startField.getText());
 				GregorianCalendar end = createCalendar(endField.getText());
@@ -199,7 +190,6 @@ public class UserControllerPanel extends JPanel{
 					}
 				}
 			}
-			@Override
 			public void removeUpdate(DocumentEvent arg0) {					
 				GregorianCalendar start = createCalendar(startField.getText());
 				GregorianCalendar end = createCalendar(endField.getText());

@@ -29,7 +29,6 @@ public class UserFrame implements RoomListener, ReservationListener{
 		myListPanel.setVisible(false);
 		rightPanel.setVisible(false);
 	}
-	@Override
 	public void reservationsChanged(ChangeEvent e) {
 		//fill in list panel
 		myListPanel.clearList();
@@ -59,7 +58,6 @@ public class UserFrame implements RoomListener, ReservationListener{
 		rightPanel.setVisible(true);
 		frame.repaint();
 	}
-	@Override
 	public void roomsChanged(ChangeEvent e) {
 		myListPanel.clearList();
 		ArrayList<Room> roomList = myManager.getAvailableRooms();
