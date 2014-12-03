@@ -44,12 +44,6 @@ public class RoomManager {
 	{
 		myReservationListeners.add(c);
 	}
-	public ArrayList<Reservation> getReservationList() {
-		return reservationList;
-	}
-	public ArrayList<Room> getAvailableRooms() {
-		return availableRooms;
-	}
 }
 =======
 import java.util.ArrayList;
