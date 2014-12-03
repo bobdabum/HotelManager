@@ -2,26 +2,36 @@ import java.util.*;
 
 public class Room {
 	private int roomID;
-	private int roomType;
+	private RoomCost roomCost;
 	private ArrayList<Reservation> reservationList;
 
-	public Room(int roomID, int roomType){
+	public Room(int roomID, RoomCost roomCost){
 		this.roomID = roomID;
-		this.roomType = roomType;
+		this.roomCost = roomCost;
 		reservationList = new ArrayList<Reservation>();
 	}
 
 	public int getID(){
 		return roomID;
 	}
-	public int getPrice(){
-		if(roomType==0)
-			return 80;
-		else
-			return 200;
+	public RoomCost getRoomCost(){
+		return roomCost;
 	}
-	public ArrayList<Reservation> getReservationOnDay(GregorianCalendar date){
-		return reservationList;
+	public int getPrice(){
+		return roomCost.getCost();
+	}
+	/**
+	 * Return the reservation on the day defined.
+	 * @param date
+	 * @return
+	 */
+	public Reservation getReservationOnDay(GregorianCalendar date){
+		for(Reservation r: reservationList){
+			if(date.compareTo(r.getStart())==0||date.compareTo(r.getEnd())==0||
+					(date.after(r.getStart())&&date.before(r.getEnd())))
+				return r;
+		}
+		return null;
 	}
 	public boolean hasCollision(GregorianCalendar start, GregorianCalendar end){
 		Iterator<Reservation> iter = reservationList.iterator();
@@ -39,5 +49,14 @@ public class Room {
 	}
 	public void addReservation(Reservation r){
 		reservationList.add(r);
+		Collections.sort(reservationList);
+	}
+	public void removeReservation(int reservationID){
+		for(int i =0; i< reservationList.size(); i++){
+			if(reservationList.get(i).getReservationID()==reservationID){
+				reservationList.remove(i);
+				break;
+			}
+		}
 	}
 }
