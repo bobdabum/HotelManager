@@ -42,7 +42,7 @@ public class ManagerFrame{
 	 * @param m
 	 */
 	@SuppressWarnings("serial")
-	public ManagerFrame(final RoomManager m, JFrame frame) {
+	public ManagerFrame(final RoomAndUserManager m, JFrame frame) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
@@ -56,8 +56,8 @@ public class ManagerFrame{
 		frame.setResizable(false);
 		frame.setVisible(true);
 
-		rooms = m.getRoomList();
-		reservations = m.getReservations();
+		rooms = m.getAvailableRooms();
+		reservations = m.getReservationList();
 		rm = m;
 
 		CalendarTabler = new DefaultTableModel() {
@@ -494,7 +494,7 @@ public class ManagerFrame{
 	int day, month, year, currMonth, currYear;
 	ArrayList<Room> rooms;
 	ArrayList<Reservation> reservations;
-	RoomManager rm;
+	RoomAndUserManager rm;
 	String textFill;
 	GregorianCalendar firstDayCalendar;
 	int daysInMonth, dayOfWeek, daysInPrevMonth;

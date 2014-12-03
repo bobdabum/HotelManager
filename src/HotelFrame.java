@@ -1,38 +1,16 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Panel;
-import java.awt.SystemColor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JToggleButton;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.View;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.text.*;
 
 public class HotelFrame{
 	
 	/**
 	 * The constructor for the view
 	 */
-	public HotelFrame(RoomManager m){
+	public HotelFrame(RoomAndUserManager m){
 		this.m = m;
 		frame = new JFrame("Hotel Reservation");
 		pane = frame.getContentPane();
@@ -319,5 +297,5 @@ public class HotelFrame{
 	int roomInt = -1;
 	Container pane;
 	JFrame frame;
-	RoomManager m;
+	RoomAndUserManager m;
 }
