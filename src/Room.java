@@ -14,7 +14,7 @@ public class Room {
 	public int getID(){
 		return roomID;
 	}
-	public RoomCost getRoomType(){
+	public RoomCost getRoomCost(){
 		return roomCost;
 	}
 	public int getPrice(){
@@ -26,6 +26,11 @@ public class Room {
 	 * @return
 	 */
 	public Reservation getReservationOnDay(GregorianCalendar date){
+		for(Reservation r: reservationList){
+			if(date.compareTo(r.getStart())==0||date.compareTo(r.getEnd())==0||
+					(date.after(r.getStart())&&date.before(r.getEnd())))
+				return r;
+		}
 		return null;
 	}
 	public boolean hasCollision(GregorianCalendar start, GregorianCalendar end){
@@ -45,5 +50,13 @@ public class Room {
 	public void addReservation(Reservation r){
 		reservationList.add(r);
 		Collections.sort(reservationList);
+	}
+	public void removeReservation(int reservationID){
+		for(int i =0; i< reservationList.size(); i++){
+			if(reservationList.get(i).getReservationID()==reservationID){
+				reservationList.remove(i);
+				break;
+			}
+		}
 	}
 }

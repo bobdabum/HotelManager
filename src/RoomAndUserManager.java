@@ -7,18 +7,19 @@ public class RoomAndUserManager {
 	//userList and roomList are core data models.
 	private ArrayList<Room> roomList;
 	private ArrayList<User> userList;
-	
+
 	//these arrayLists reflect query results.
 	private ArrayList<Room> availableRooms;
 	private ArrayList<Reservation> reservationList, receiptList;
 	private ArrayList<RoomListener> roomListeners;
 	private ArrayList<ReservationListener> reservationListeners;
-	
+
 	//Current User
 	private User currentUser;
+	private int curResID;
 	private RoomCost roomOfInterest = RoomCost.Economical;
-	
-	public RoomAndUserManager(ArrayList<Room> roomList){
+
+	public RoomAndUserManager(ArrayList<Room> roomList, int curResID){
 		this.roomList=roomList;
 		userList = new ArrayList<User>();
 		availableRooms = new ArrayList<Room>();
@@ -26,6 +27,7 @@ public class RoomAndUserManager {
 		receiptList = new ArrayList<Reservation>();
 		roomListeners = new ArrayList<RoomListener>();
 		reservationListeners = new ArrayList<ReservationListener>();
+		this.curResID = curResID;
 	}
 
 	/**
@@ -46,7 +48,7 @@ public class RoomAndUserManager {
 		//update availableRooms
 		availableRooms.clear();
 		for(Room r:roomList){
-			if(!r.hasCollision(start, end) && r.getRoomType().equals(roomOfInterest))
+			if(!r.hasCollision(start, end) && r.getRoomCost().equals(roomOfInterest))
 				availableRooms.add(r);
 		}	
 		notifyRoomListeners();
@@ -89,14 +91,15 @@ public class RoomAndUserManager {
 	public ArrayList<Reservation> getCurrentUserReservations(){
 		return currentUser.getUserReservations();
 	}
-	
+
 	/**
 	 * Creates new user and returns the userID.
 	 * @param name
 	 * @return
 	 */
 	public int createUser(String name){
-		userList.add(new User(new ArrayList<Reservation>(),userList.size()-1,name));
+		currentUser = new User(new ArrayList<Reservation>(),userList.size(),name);
+		userList.add(currentUser);
 		return userList.size()-1;
 	}
 	public void login(int userID) throws Exception{
@@ -115,28 +118,43 @@ public class RoomAndUserManager {
 	 * @throws Exception
 	 */
 	public void addReservation(GregorianCalendar start, GregorianCalendar end, int roomID, int userID){
-			Reservation temp = new Reservation(start,end,roomID,roomList.get(roomID).getRoomType(),userID,userList.get(userID).getName());
-			//updates users and room reservations to reflect new reservations.
-			userList.get(userID).addReservation(temp);
-			roomList.get(roomID).addReservation(temp);
-			
-			//remove room from available rooms assuming no change in period of interest
-			for(int i=0;i<availableRooms.size();i++){
-				if(availableRooms.get(i).getID()==roomID)
-				{
-					availableRooms.remove(i);
-					break;
-				}
+		Reservation temp = new Reservation(start,end,roomID,roomList.get(roomID).getRoomCost(),
+				userID,userList.get(userID).getName(), curResID);
+		//updates users and room reservations to reflect new reservations.
+		userList.get(userID).addReservation(temp);
+		roomList.get(roomID).addReservation(temp);
+
+		//remove room from available rooms assuming no change in period of interest
+		for(int i=0;i<availableRooms.size();i++){
+			if(availableRooms.get(i).getID()==roomID)
+			{
+				availableRooms.remove(i);
+				break;
 			}
-			notifyReservationListeners();
-			
-			//add to receiptList.
-			receiptList.add(temp);
+		}
+		notifyReservationListeners();
+
+		//increments unique reservation id counter
+		curResID++;
+		//add to receiptList.
+		receiptList.add(temp);
 	}
-/**
- * Attach ChangeListener to listener array
- * @param c 
- */
+	public void addReservationFromFile(GregorianCalendar start, GregorianCalendar end, int roomID, int userID, int resID){
+		Reservation temp = new Reservation(start,end,roomID,roomList.get(roomID).getRoomCost(),
+				userID,userList.get(userID).getName(), resID);
+		//updates users and room reservations to reflect new reservations.
+		userList.get(userID).addReservation(temp);
+		roomList.get(roomID).addReservation(temp);		
+	}
+	public void removeReservation(int reservationID){
+		Reservation removedReservation = currentUser.removeReservation(reservationID);
+		if(removedReservation!=null)
+			roomList.get(removedReservation.getRoomID()).removeReservation(reservationID);
+	}
+	/**
+	 * Attach ChangeListener to listener array
+	 * @param c 
+	 */
 	public void attachRoomListener(RoomListener c)
 	{
 		roomListeners.add(c);

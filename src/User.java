@@ -2,19 +2,27 @@ import java.util.*;
 
 
 public class User {
-	private ArrayList<Reservation> userReservations;
+	private ArrayList<Reservation> reservationList;
 	private int userID;
 	private String name;
 	public User(ArrayList<Reservation> userReservations,int userID,String name){
 		this.setUserID(userID);
 		this.setName(name);
-		this.userReservations = userReservations;
+		this.reservationList = userReservations;
 	}
 	public ArrayList<Reservation> getUserReservations() {
-		return userReservations;
+		return reservationList;
 	}
 	public void addReservation(Reservation r){
-		userReservations.add(r);
+		reservationList.add(r);
+	}
+	public Reservation removeReservation(int reservationID){
+		for(int i =0; i< reservationList.size(); i++){
+			if(reservationList.get(i).getReservationID()==reservationID){
+				return reservationList.remove(i);				
+			}
+		}
+		return null;
 	}
 	
 	public int getUserID() {

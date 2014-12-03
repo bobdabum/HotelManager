@@ -11,8 +11,13 @@ public class ReceiptFrame {
 	public void draw(){
 		JFrame frame = new JFrame();
 		ArrayList<Reservation> myList = rs.getList(myManager);
-		ListPanel<Reservation> lp = new ListPanel<Reservation>(new ListItemReceipt());
-		lp.populateList(myList, null);
+		ListPanel lp = new ListPanel();
+		int total = 0;
+		for(Reservation r:myList){
+			lp.populateList(new ListItemReceipt(r,0));
+			total+=r.getRoomCost().getCost();
+		}
+		lp.populateList(new ListItemReceipt(null, total));
 		frame.add(lp);
 		frame.pack();
 		frame.setVisible(true);
