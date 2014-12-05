@@ -1,10 +1,6 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-
 
 public class HotelManager {
 	/**
@@ -13,7 +9,8 @@ public class HotelManager {
 	 */
 	public static void main(String[] args) {
 		final RoomAndUserManager myManager = loadFromFile();
-		
+		HotelFrame hf = new HotelFrame(myManager);
+		hf.run();
 	}
 	private static RoomAndUserManager loadFromFile(){
 		BufferedReader in;
@@ -22,7 +19,7 @@ public class HotelManager {
 		ArrayList<Room> roomList = new ArrayList<Room>();
 		for(int i=0;i<10;i++)
 			roomList.add(new Room(i, RoomCost.Economical));
-		for(int i=10;i<19;i++)
+		for(int i=10;i<=19;i++)
 			roomList.add(new Room(i, RoomCost.Luxury));
 		
 		try {

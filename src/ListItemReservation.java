@@ -2,13 +2,17 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JLabel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 @SuppressWarnings("serial")
 public class ListItemReservation extends ListItem{
-	public ListItemReservation(int resID, Reservation r) {
+	private ChangeListener cl;
+	public ListItemReservation(int resID, Reservation r, ChangeListener cl) {
 		super(resID);
-		SimpleDateFormat sf = new SimpleDateFormat("MM/DD/YYYY");
+		this.cl = cl;
+		SimpleDateFormat sf = new SimpleDateFormat("MM/dd/YYYY");
 		setLayout(new GridLayout(2,2));
 		add(new JLabel("Room: "+r.getRoomID()));
 		add(new JLabel(""));
@@ -19,8 +23,10 @@ public class ListItemReservation extends ListItem{
 	@Override
 	protected void onClicked(){
 		super.onClicked();
-		if(isSelected())
+		if(isSelected()){
 			setBackground(Color.LIGHT_GRAY);
+			cl.stateChanged(new ChangeEvent(this));
+		}
 		else
 			setBackground(Color.white);
 		revalidate();

@@ -17,10 +17,12 @@ public class ReceiptFrame {
 			lp.populateList(new ListItemReceipt(r,0));
 			total+=r.getRoomCost().getCost();
 		}
-		lp.populateList(new ListItemReceipt(null, total));
-		frame.add(lp);
+		frame.getContentPane().setBounds(0,0,375,500);
+		lp.populateList(new ListItemReceiptSum(null, total, 0));
+		JScrollPane listPanelContainer = new JScrollPane(lp);
+		frame.add(listPanelContainer);
 		frame.pack();
 		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		myManager.clearReceipt();
 	}
 }

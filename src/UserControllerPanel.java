@@ -3,8 +3,6 @@ import java.awt.event.*;
 import java.util.GregorianCalendar;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 @SuppressWarnings("serial")
 public class UserControllerPanel extends JPanel{
@@ -39,9 +37,14 @@ public class UserControllerPanel extends JPanel{
 				confirmButton.addActionListener(new ActionListener(){
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						int userID = myManager.createUser(infoField.getText());
-						throwDialogue(new Exception("Your user ID is: "+userID+". Please record this!"), JOptionPane.INFORMATION_MESSAGE);
-						changeToUserOptions();
+						if(infoField.getText().length()>0)
+						{
+							int userID = myManager.createUser(infoField.getText());
+							RoomAndUserManager.throwDialogue(new Exception("Your user ID is: "+userID+". Please record this!"), JOptionPane.INFORMATION_MESSAGE);
+							changeToUserOptions();
+						}
+						else
+							RoomAndUserManager.throwDialogue(new Exception("Please enter a name!"), JOptionPane.ERROR_MESSAGE);
 					}
 				});
 				revalidate();
@@ -62,29 +65,30 @@ public class UserControllerPanel extends JPanel{
 					public void actionPerformed(ActionEvent arg0) {
 						try{
 							myManager.login(Integer.parseInt(infoField.getText()));
+							changeToUserOptions();
 						}
 						catch(NumberFormatException e){
-							throwDialogue(new Exception("User ID must be numerical value!"), JOptionPane.ERROR_MESSAGE);
+							RoomAndUserManager.throwDialogue(new Exception("User ID must be numerical value!"), JOptionPane.ERROR_MESSAGE);
 						}
 						catch(Exception e){
-							throwDialogue(e, JOptionPane.ERROR_MESSAGE);
+							RoomAndUserManager.throwDialogue(e, JOptionPane.ERROR_MESSAGE);
 						}
-						changeToUserOptions();
 					}});
 				revalidate();
 				repaint();
 			}});
 
 		add(newUser);add(exisUser);add(new JLabel(""));
-		add(desc);add(infoField);
+		add(desc);add(infoField);add(confirmButton);
 		revalidate();
 		repaint();
 	}
-	private void changeToUserOptions(){
+	public void changeToUserOptions(){
 		removeAll();
 		setLayout(new FlowLayout());
 		JButton makeRes = new JButton("Make Reservation");
 		JButton viewRes = new JButton("View/Cancel Reservation");
+		JButton logOut = new JButton("Log out");
 		makeRes.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
 				changeToMakeReservation();
@@ -95,8 +99,15 @@ public class UserControllerPanel extends JPanel{
 				changeToViewReservations();
 			}			
 		});
+		logOut.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				changeToUserLogin();
+			}
+		});
 		add(makeRes);
 		add(viewRes);
+		add(logOut);
 		revalidate();
 		repaint();
 	}
@@ -116,15 +127,14 @@ public class UserControllerPanel extends JPanel{
 				GregorianCalendar end = createCalendar(endField.getText());
 				if(start!=null&&end!=null){
 					try{
-						myManager.updateRoomCost(RoomCost.Luxury);
-						myManager.updateRoomParams(start, end);
+						myManager.updateRoomParams(start, end,RoomCost.Luxury);
 					}
 					catch(Exception e){
-						throwDialogue(e, JOptionPane.ERROR_MESSAGE);
+						RoomAndUserManager.throwDialogue(e, JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				else
-					throwDialogue(new Exception("Incorrectly formatted date! Use MM/DD/YYYY!"), JOptionPane.ERROR_MESSAGE);
+					RoomAndUserManager.throwDialogue(new Exception("Incorrectly formatted date! Use MM/DD/YYYY!"), JOptionPane.ERROR_MESSAGE);
 			}
 		});
 		econButton.addActionListener(new ActionListener(){
@@ -133,76 +143,16 @@ public class UserControllerPanel extends JPanel{
 				GregorianCalendar end = createCalendar(endField.getText());
 				if(start!=null&&end!=null){
 					try{
-						myManager.updateRoomCost(RoomCost.Economical);
-						myManager.updateRoomParams(start, end);
+						myManager.updateRoomParams(start, end, RoomCost.Economical);
 					}
 					catch(Exception e){
-						throwDialogue(e, JOptionPane.ERROR_MESSAGE);
+						RoomAndUserManager.throwDialogue(e, JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				else
-					throwDialogue(new Exception("Incorrectly formatted date! Use MM/DD/YYYY!"), JOptionPane.ERROR_MESSAGE);
+					RoomAndUserManager.throwDialogue(new Exception("Incorrectly formatted date! Use MM/DD/YYYY!"), JOptionPane.ERROR_MESSAGE);
 			}
 		});
-
-		startField.getDocument().addDocumentListener(new DocumentListener(){
-			public void changedUpdate(DocumentEvent arg0) {	
-			}
-			public void insertUpdate(DocumentEvent arg0) {					
-				GregorianCalendar start = createCalendar(startField.getText());
-				GregorianCalendar end = createCalendar(endField.getText());
-				if(start!=null&&end!=null){
-					try{
-						myManager.updateRoomCost(RoomCost.Economical);
-						myManager.updateRoomParams(start, end);
-					}
-					catch(Exception e){
-						throwDialogue(e, JOptionPane.ERROR_MESSAGE);
-					}
-				}
-			}
-			public void removeUpdate(DocumentEvent arg0) {					
-				GregorianCalendar start = createCalendar(startField.getText());
-				GregorianCalendar end = createCalendar(endField.getText());
-				if(start!=null&&end!=null){
-					try{
-						myManager.updateRoomCost(RoomCost.Economical);
-						myManager.updateRoomParams(start, end);
-					}
-					catch(Exception e){
-						throwDialogue(e, JOptionPane.ERROR_MESSAGE);
-					}
-				}	
-			}});
-		endField.getDocument().addDocumentListener(new DocumentListener(){
-			public void changedUpdate(DocumentEvent arg0) {	
-			}
-			public void insertUpdate(DocumentEvent arg0) {					
-				GregorianCalendar start = createCalendar(startField.getText());
-				GregorianCalendar end = createCalendar(endField.getText());
-				if(start!=null&&end!=null){
-					try{
-						myManager.updateRoomCost(RoomCost.Economical);
-						myManager.updateRoomParams(start, end);
-					}
-					catch(Exception e){
-						throwDialogue(e, JOptionPane.ERROR_MESSAGE);
-					}
-				}
-			}
-			public void removeUpdate(DocumentEvent arg0) {					
-				GregorianCalendar start = createCalendar(startField.getText());
-				GregorianCalendar end = createCalendar(endField.getText());
-				if(start!=null&&end!=null){
-					try{
-						myManager.updateRoomCost(RoomCost.Economical);
-						myManager.updateRoomParams(start, end);
-					}
-					catch(Exception e){
-						throwDialogue(e, JOptionPane.ERROR_MESSAGE);
-					}
-				}	
-			}});
 
 		setLayout(new GridLayout(4,2));
 		add(startLabel);
@@ -211,22 +161,16 @@ public class UserControllerPanel extends JPanel{
 		add(endField);
 		add(typeLabel);
 		add(new JLabel(""));
-		add(luxButton);
 		add(econButton);
+		add(luxButton);
 		revalidate();
 		repaint();
 	}
 	private void changeToViewReservations(){
 		removeAll();
-		myManager.getCurrentUserReservations();
+		myManager.loadUserReservations();
 		revalidate();
 		repaint();
-	}
-	private void throwDialogue(Exception e, int optionPaneType){
-		JOptionPane.showMessageDialog(null,
-				e.getMessage(),
-				"Error",
-				optionPaneType);
 	}
 	private GregorianCalendar createCalendar(String date){
 		GregorianCalendar returnCal = null;

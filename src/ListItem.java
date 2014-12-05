@@ -1,7 +1,7 @@
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 
 @SuppressWarnings("serial")
@@ -10,6 +10,10 @@ public abstract class ListItem extends JPanel{
 	private int id;
 	public ListItem(int id){
 		this.id = id;
+		setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK),
+				 									BorderFactory.createEmptyBorder(5,5,5,5)));
+		setPreferredSize(new Dimension(250,20));
+		setBackground(Color.white);
 		addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent arg0) {

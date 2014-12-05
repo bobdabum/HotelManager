@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.text.SimpleDateFormat;
 
@@ -7,11 +8,12 @@ import javax.swing.*;
 public class ListItemReceipt extends ListItem{
 		public ListItemReceipt(Reservation r,int position) {
 			super(position);
-			SimpleDateFormat sf = new SimpleDateFormat("MM/DD/YYYY");
+			setPreferredSize(new Dimension(375,35));
+			SimpleDateFormat sf = new SimpleDateFormat("MM/dd/YYYY");
 			setLayout(new GridLayout(2,3));
 			add(new JLabel("User ID: "+r.getUserID()));
 			add(new JLabel("User Name: "+r.getUserName()));
-			add(new JLabel("Room ID: "+r.getRoomID()));
+			add(new JLabel("Room: #"+r.getRoomID()));
 			add(new JLabel("Check-in: "+sf.format(r.getStart().getTime())));
 			add(new JLabel("Check-out: "+sf.format(r.getEnd().getTime())));
 			add(new JLabel("Cost: $"+r.getRoomCost().getCost()));

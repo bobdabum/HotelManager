@@ -34,18 +34,13 @@ public class Room {
 		return null;
 	}
 	public boolean hasCollision(GregorianCalendar start, GregorianCalendar end){
-		Iterator<Reservation> iter = reservationList.iterator();
-		boolean collision = false;
-		while(iter.hasNext()){
-			Reservation temp = iter.next();
-			if(end.before(temp.getStart())||start.after(temp.getStart()))
+		for(Reservation r : reservationList){
+			if(end.before(r.getStart())||start.after(r.getEnd()))
 				continue;
-			else{
-				collision = true;
-				break;
-			}
+			else
+				return true;
 		}
-		return collision;
+		return false;
 	}
 	public void addReservation(Reservation r){
 		reservationList.add(r);

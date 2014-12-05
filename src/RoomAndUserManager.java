@@ -1,5 +1,6 @@
 import java.util.*;
 
+import javax.swing.JOptionPane;
 import javax.swing.event.*;
 
 
@@ -14,10 +15,10 @@ public class RoomAndUserManager {
 	private ArrayList<RoomListener> roomListeners;
 	private ArrayList<ReservationListener> reservationListeners;
 
-	//Current User
+	//Saved session parameters
 	private User currentUser;
 	private int curResID;
-	private RoomCost roomOfInterest = RoomCost.Economical;
+	private GregorianCalendar curStart, curEnd;
 
 	public RoomAndUserManager(ArrayList<Room> roomList, int curResID){
 		this.roomList=roomList;
@@ -27,6 +28,8 @@ public class RoomAndUserManager {
 		receiptList = new ArrayList<Reservation>();
 		roomListeners = new ArrayList<RoomListener>();
 		reservationListeners = new ArrayList<ReservationListener>();
+		curStart = new GregorianCalendar();
+		curEnd = new GregorianCalendar();
 		this.curResID = curResID;
 	}
 
@@ -36,31 +39,32 @@ public class RoomAndUserManager {
 	 * @param end
 	 * @return
 	 */
-	public void updateRoomParams(GregorianCalendar start, GregorianCalendar end) throws Exception{
+	public void updateRoomParams(GregorianCalendar start, GregorianCalendar end, RoomCost rc) throws Exception{
 		//check to make sure input dates are correct.
 		GregorianCalendar now = new GregorianCalendar();		
 		if(start.after(end))
 			throw new Exception("Start date cannot be after end date.");
 		if(now.after(start))
 			throw new Exception("Start date cannot be before today.");
+		if(!start.after(end)&&!end.after(start))
+			throw new Exception("Need to book atleast 1 day.");
 		if(daysBetweenDates(start, end)>60)
 			throw new Exception("Can not stay for more than 60 days.");
 		//update availableRooms
 		availableRooms.clear();
 		for(Room r:roomList){
-			if(!r.hasCollision(start, end) && r.getRoomCost().equals(roomOfInterest))
+			if(!r.hasCollision(start, end) && r.getRoomCost().equals(rc))
 				availableRooms.add(r);
-		}	
+		}
+		curStart = start; curEnd = end;
 		notifyRoomListeners();
-	}
-	public void updateRoomCost(RoomCost rc){
-		roomOfInterest = rc;
 	}
 
 	private int daysBetweenDates(GregorianCalendar start, GregorianCalendar end){
 		int numDays = 0;
-		while(start.before(end)){
-			start.add(GregorianCalendar.DAY_OF_MONTH, 1);
+		GregorianCalendar tempStart = (GregorianCalendar) start.clone();
+		while(tempStart.before(end)){
+			tempStart.add(GregorianCalendar.DAY_OF_MONTH, 1);
 			numDays++;
 		}
 		return numDays;
@@ -84,8 +88,8 @@ public class RoomAndUserManager {
 	 * Updates reservationList filtered by userID.
 	 * @param userID
 	 */
-	public void getUserReservations(int userID){
-		reservationList = userList.get(userID).getUserReservations();
+	public void loadUserReservations(){
+		reservationList = currentUser.getUserReservations();
 		notifyReservationListeners();
 	}
 	public ArrayList<Reservation> getCurrentUserReservations(){
@@ -103,7 +107,7 @@ public class RoomAndUserManager {
 		return userList.size()-1;
 	}
 	public void login(int userID) throws Exception{
-		if(userID >= userList.size()){
+		if(userID < userList.size() && userID>=0){
 			currentUser = userList.get(userID);
 		}
 		else
@@ -117,8 +121,9 @@ public class RoomAndUserManager {
 	 * @param user
 	 * @throws Exception
 	 */
-	public void addReservation(GregorianCalendar start, GregorianCalendar end, int roomID, int userID){
-		Reservation temp = new Reservation(start,end,roomID,roomList.get(roomID).getRoomCost(),
+	public void addReservation(int roomID){
+		int userID = currentUser.getUserID();
+		Reservation temp = new Reservation(curStart,curEnd,roomID,roomList.get(roomID).getRoomCost(),
 				userID,userList.get(userID).getName(), curResID);
 		//updates users and room reservations to reflect new reservations.
 		userList.get(userID).addReservation(temp);
@@ -132,7 +137,7 @@ public class RoomAndUserManager {
 				break;
 			}
 		}
-		notifyReservationListeners();
+		notifyRoomListeners();
 
 		//increments unique reservation id counter
 		curResID++;
@@ -150,6 +155,7 @@ public class RoomAndUserManager {
 		Reservation removedReservation = currentUser.removeReservation(reservationID);
 		if(removedReservation!=null)
 			roomList.get(removedReservation.getRoomID()).removeReservation(reservationID);
+		notifyReservationListeners();
 	}
 	/**
 	 * Attach ChangeListener to listener array
@@ -181,7 +187,16 @@ public class RoomAndUserManager {
 	public ArrayList<Reservation> getReceiptList(){
 		return receiptList;
 	}
+	public void clearReceipt(){
+		receiptList.clear();
+	}
 	public ArrayList<Room> getAvailableRooms() {
 		return availableRooms;
+	}
+	public static void throwDialogue(Exception e, int optionPaneType){
+		JOptionPane.showMessageDialog(null,
+				e.getMessage(),
+				"Message",
+				optionPaneType);
 	}
 }
