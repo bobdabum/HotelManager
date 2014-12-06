@@ -1,40 +1,12 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.SystemColor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-
-import java.text.DateFormatSymbols;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 
 import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.table.*;
+
+import java.text.*;
 
 public class ManagerFrame{
 	/**
@@ -43,11 +15,11 @@ public class ManagerFrame{
 	 */
 	@SuppressWarnings("serial")
 	public ManagerFrame(final RoomAndUserManager m, JFrame frame) {
-		try {
+		/*try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 		this.frame = frame;
 		frame.setName("Calendar");
 		frame.setBounds(20, 20, 630, 350);
@@ -216,6 +188,8 @@ public class ManagerFrame{
 		// attach the listeners to grid
 		CalendarTable.getSelectionModel().addListSelectionListener(ls);
 		CalendarTable.getColumnModel().getSelectionModel().addListSelectionListener(ls);
+		save();
+		quit();
 	}
 
 	/**
@@ -344,7 +318,7 @@ public class ManagerFrame{
 	public void displayFrame() {
 		frame.getContentPane().setLayout(null);
 		JScrollPane scroller = new JScrollPane();
-		scroller.setBounds(330, 4, 285, 314);
+		scroller.setBounds(330, 4, 287, 253);
 		frame.getContentPane().add(scroller);
 
 		JPanel borderPanel = new JPanel();
@@ -480,6 +454,35 @@ public class ManagerFrame{
 
 			return this;
 		}
+	}
+	
+	/**
+	 * Saves reservations and user information to a txt file
+	 */
+	public void save(){
+		JButton saveButton = new JButton("Save");
+		saveButton.setBounds(334, 267, 137, 45);
+		saveButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				rm.saveAll();
+				JOptionPane.showMessageDialog(frame, "Saved!");
+			}
+		});
+		frame.add(saveButton);
+	}
+	
+	/**
+	 * Quits the hotel reservation program
+	 */
+	public void quit(){
+		JButton quitButton = new JButton("Quit");
+		quitButton.setBounds(475, 267, 137, 45);
+		quitButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+			}
+		});
+		frame.add(quitButton);
 	}
 
 	JFrame frame;
