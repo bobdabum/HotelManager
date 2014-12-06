@@ -1,3 +1,5 @@
+import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.swing.JOptionPane;
@@ -46,8 +48,6 @@ public class RoomAndUserManager {
 			throw new Exception("Start date cannot be after end date.");
 		if(now.after(start))
 			throw new Exception("Start date cannot be before today.");
-		if(!start.after(end)&&!end.after(start))
-			throw new Exception("Need to book atleast 1 day.");
 		if(daysBetweenDates(start, end)>60)
 			throw new Exception("Can not stay for more than 60 days.");
 		//update availableRooms
@@ -198,5 +198,33 @@ public class RoomAndUserManager {
 				e.getMessage(),
 				"Message",
 				optionPaneType);
+	}
+	public void saveAll(){
+		try{
+			File userFile = new File("userList.txt");
+			File reservationFile = new File("reservationList.txt");
+			FileWriter userWriter = new FileWriter(userFile);
+			FileWriter reservationWriter = new FileWriter(reservationFile);
+
+			//users
+			userWriter.write(String.format(curResID+"%n"));
+			for(User u: userList){
+				userWriter.write(String.format(u.getUserID() + "," + u.getName() + "%n"));
+			}	
+
+			//reservations
+			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY");
+
+			for(Reservation r: reservationList){
+				reservationWriter.write((r.getRoomID() + "," + r.getUserID() + "," + r.getReservationID()
+						+ "," + sdf.format(r.getStart().getTime()) + "," + 
+						sdf.format(r.getEnd().getTime()+"%n")));
+			}
+			userWriter.close();
+			reservationWriter.close();
+		}
+		catch(IOException e){
+			
+		}
 	}
 }
