@@ -12,6 +12,10 @@ public class HotelManager {
 		HotelFrame hf = new HotelFrame(myManager);
 		hf.run();
 	}
+	/**
+	 * Tries to load reservation/ user information from file.
+	 * @return RoomAndUserManager model.
+	 */
 	private static RoomAndUserManager loadFromFile(){
 		BufferedReader in;
 		RoomAndUserManager myManager = null;

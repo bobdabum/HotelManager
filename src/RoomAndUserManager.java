@@ -22,6 +22,12 @@ public class RoomAndUserManager {
 	private int curResID;
 	private GregorianCalendar curStart, curEnd;
 
+	/**
+	 * Model for hotel manager program. Contains listeners for both room listeners and reservation lisiteners.
+	 * @param roomList Contains all the rooms managed by the hotel.
+	 * @param curResID Counter for the unique identifier "reservationID" for the 
+	 * reservation class. Counter increased every time a reservation is created. 
+	 */
 	public RoomAndUserManager(ArrayList<Room> roomList, int curResID){
 		this.roomList=roomList;
 		userList = new ArrayList<User>();
@@ -36,9 +42,9 @@ public class RoomAndUserManager {
 	}
 
 	/**
-	 * Returns available rooms in specified time frame. 
-	 * @param start
-	 * @param end
+	 * Returns available rooms in specified time frame. Throws exception if conditions are not met.
+	 * @param start Start date of reservation.
+	 * @param end End date of reservation.
 	 * @return
 	 */
 	public void updateRoomParams(GregorianCalendar start, GregorianCalendar end, RoomCost rc) throws Exception{
@@ -60,6 +66,12 @@ public class RoomAndUserManager {
 		notifyRoomListeners();
 	}
 
+	/**
+	 * Private method for counting the number of days between two days.
+	 * @param start Starting date.
+	 * @param end Ending date.
+	 * @return Number of days between the two dates.
+	 */
 	private int daysBetweenDates(GregorianCalendar start, GregorianCalendar end){
 		int numDays = 0;
 		GregorianCalendar tempStart = (GregorianCalendar) start.clone();
@@ -71,7 +83,7 @@ public class RoomAndUserManager {
 	}
 	/**
 	 * Updates the reservationList filtered by day selected.
-	 * @param day
+	 * @param day The date of interest.
 	 */
 	public void updateCalendarDay(GregorianCalendar day){
 		//gets reservationList on date of interest
