@@ -11,15 +11,17 @@ import java.text.*;
 public class ManagerFrame{
 	/**
 	 * creates the Frame with the calendar and Manager options
-	 * @param m
+	 * @param m the RoomAndUserManager
+	 * @param frame the JFrame being used
 	 */
 	@SuppressWarnings("serial")
-	public ManagerFrame(final RoomAndUserManager m, JFrame frame) {
+	public ManagerFrame(final RoomAndUserManager m, final JFrame frame) {
 		/*try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}*/
+		scroller = new JScrollPane();
 		this.frame = frame;
 		frame.setName("Calendar");
 		frame.setBounds(20, 20, 630, 350);
@@ -98,6 +100,8 @@ public class ManagerFrame{
 					dayOfWeek = firstDayCalendar.get(GregorianCalendar.DAY_OF_WEEK);
 					firstDayCalendar.add(Calendar.MONTH, -1);
 					daysInPrevMonth = firstDayCalendar.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+					frame.getContentPane().remove(scroller);
+					frame.repaint();
 					updateCalendar();
 					displayFrame();
 				}
@@ -194,8 +198,9 @@ public class ManagerFrame{
 
 	/**
 	 * Updates the Calendar to another month or year
+	 * every time the calendar is changed (goes to another month/year), updateCalendar is called
 	 */
-	public void updateCalendar() {
+	public void updateCalendar() {		
 		int x = CalendarTable.getSelectedRow();
 		int y = CalendarTable.getSelectedColumn();
 		boolean changeSelectionPrev = false;
@@ -314,23 +319,20 @@ public class ManagerFrame{
 
 	/**
 	 * The display frame, where the reservations are shown.
+	 * Displays all the rooms available and also which rooms are taken
 	 */
 	public void displayFrame() {
-		frame.getContentPane().setLayout(null);
-		JScrollPane scroller = new JScrollPane();
+		scroller = new JScrollPane();
 		scroller.setBounds(330, 4, 287, 253);
-		frame.getContentPane().add(scroller);
+		frame.add(scroller);
 
 		JPanel borderPanel = new JPanel();
-		JPanel borderPanel2 = new JPanel();
 
 		scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scroller.setViewportView(borderPanel);
-		borderPanel.setLayout(new BorderLayout(0, 0));
 		scroller.setBorder(BorderFactory.createTitledBorder("Reservations"));
-		borderPanel.add(borderPanel2, BorderLayout.NORTH);
-		borderPanel2.setLayout(new GridLayout(0, 1, 0, 1));
+		borderPanel.setLayout(new GridLayout(0, 1, 0, 1));
 
 		GregorianCalendar firstDayCalendar = new GregorianCalendar(year, month - 1, 1);
 		int daysInMonth = firstDayCalendar.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
@@ -348,63 +350,43 @@ public class ManagerFrame{
 		int day;
 		if (selected != "") day = Integer.parseInt(selected.substring(1));
 		else day = 0;
-
-		GregorianCalendar tempCal = new GregorianCalendar();
-		tempCal.set(Calendar.YEAR, year);
-		tempCal.set(Calendar.MONTH, month - 1);
-		tempCal.set(Calendar.DAY_OF_MONTH, day);
-
-		//make a copy of the reservations that fit the description
-		ArrayList<Reservation> tempRes = new ArrayList<Reservation>();
-		for (int i = 0; i < reservations.size(); i++) {
-			GregorianCalendar start = reservations.get(i).getStart();
-			GregorianCalendar end = reservations.get(i).getEnd();
-			if (start.before(tempCal)
-					|| (start.get(Calendar.YEAR) == tempCal.get(Calendar.YEAR) && start.get(Calendar.DAY_OF_YEAR) == tempCal
-							.get(Calendar.DAY_OF_YEAR))) {
-				if (end.after(tempCal)
-						|| (end.get(Calendar.YEAR) == tempCal.get(Calendar.YEAR) && end.get(Calendar.DAY_OF_YEAR) == tempCal
-								.get(Calendar.DAY_OF_YEAR))) tempRes.add(reservations.get(i));
-			}
-		}
 		
-		//sort the reservations
-		Collections.sort(tempRes, ReservationComparator());
+		GregorianCalendar tempCal = new GregorianCalendar(year, month-1, day);
 
-		for(int i = 0; i < tempRes.size(); i++){
-			JTextArea rows = new JTextArea();
-			rows.setBackground(Color.LIGHT_GRAY);
-			rows.setPreferredSize(new Dimension(300, 50));
-			borderPanel2.add(rows);
-			rows.setLayout(null);
-			rows.setEditable(false);
-			Font font = new Font("Arial", Font.BOLD, 12);
-			rows.setFont(font);
-
-			textFill = " Room: " + tempRes.get(i).getRoomID() + "  \n User: " + tempRes.get(i).getUserID()
-					+ "  \n Price: " + rooms.get(tempRes.get(i).getRoomID()).getPrice();
-
-			rows.setText(textFill);
-
-			if (i % 2 == 1) rows.setBackground(SystemColor.inactiveCaptionBorder);
-		}
-	}
-
-	/**
-	 * the comparator to compare reservations
-	 * @return
-	 */
-	public static Comparator<Reservation> ReservationComparator() {
-		return new Comparator<Reservation>() {
-			public int compare(Reservation a, Reservation b) {
-				if (a.getRoomID() < b.getRoomID()) return -1;
-				else return 1;
+		rm.updateCalendarDay(tempCal);
+		ArrayList<Reservation> rl = rm.getReservationList();
+		
+		for(int i = 0; i < 20; i++){
+			JTextArea row = new JTextArea();
+			row.setBackground(new Color(188, 255, 199));
+			row.setPreferredSize(new Dimension(300, 50));
+			borderPanel.add(row);
+			row.setLayout(null);
+			row.setEditable(false);
+			row.setFont(new Font("Arial", Font.BOLD, 12));
+			
+			textFill = " Room: " + (i+1) + "          Type: $" + (i<10?RoomCost.Economical.getCost():RoomCost.Luxury.getCost());
+			for(Reservation r:rl)
+			if(r.getRoomID() == i){
+				row.setBackground(new Color(255, 205, 205));
+				textFill = " Room: " + (r.getRoomID()+1) + "          Type: " + r.getRoomCost()
+						+ "\n User: " + r.getUserName() + "           UserID: " + r.getUserID()
+						+ "\n Price:  $" + r.getRoomCost().getCost();
 			}
-		};
+
+			row.setText(textFill);
+		}
+
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			   public void run() { 
+			       scroller.getVerticalScrollBar().setValue(0);
+			   }
+		});
 	}
 	
 	/**
-	 * Colors the cells and sets the default selected cell (today)
+	 * Colors the cells and sets the default selected cell
+	 * Also colors in the current date and the selected date
 	 */
 	@SuppressWarnings("serial")
 	class DecorateTable extends DefaultTableCellRenderer {
@@ -485,6 +467,7 @@ public class ManagerFrame{
 		frame.add(quitButton);
 	}
 
+	JScrollPane scroller;
 	JFrame frame;
 	String[] monthList = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
 			"October", "November", "December" };

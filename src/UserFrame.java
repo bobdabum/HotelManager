@@ -35,7 +35,7 @@ public class UserFrame implements RoomListener, ReservationListener{
 		myListPanel = new ListPanel();
 		rightPanel = new JPanel();
 
-		topPanel = new UserControllerPanel(myManager);
+		topPanel = new UserControllerPanel(myManager,this);
 		topPanel.setBorder(new EmptyBorder(10,10,10,10));
 
 		listPanelContainer = new JScrollPane(myListPanel);
@@ -167,5 +167,14 @@ public class UserFrame implements RoomListener, ReservationListener{
 				frame.repaint();
 			}
 		};
+	}
+
+	/**
+	 * Exits the user frame to the manager.
+	 */
+	public void exitUser(){
+		frame.getContentPane().removeAll();
+		HotelFrame hf = new HotelFrame(myManager, frame);
+		hf.run();
 	}
 }

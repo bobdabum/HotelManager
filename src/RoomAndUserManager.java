@@ -286,16 +286,16 @@ public class RoomAndUserManager {
 			//users
 			userWriter.write(String.format(curResID+"%n"));
 			for(User u: userList){
-				userWriter.write(String.format(u.getUserID() + "," + u.getName() + "%n"));
+				userWriter.write(String.format(u.getName() + "%n"));
 			}	
 
 			//reservations
 			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY");
 
 			for(Reservation r: reservationList){
-				reservationWriter.write((r.getRoomID() + "," + r.getUserID() + "," + r.getReservationID()
+				reservationWriter.write(String.format((r.getRoomID() + "," + r.getUserID() + "," + r.getReservationID()
 						+ "," + sdf.format(r.getStart().getTime()) + "," + 
-						sdf.format(r.getEnd().getTime()+"%n")));
+						sdf.format(r.getEnd().getTime())+"%n")));
 			}
 			userWriter.close();
 			reservationWriter.close();

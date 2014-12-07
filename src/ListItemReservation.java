@@ -17,14 +17,14 @@ public class ListItemReservation extends ListItem{
 	 * Constructor for ListItem. ID of interest is the reservation ID.
 	 * @param resID
 	 * @param r
-	 * @param cl ChangeListener for ListItem. The change lsitener is the ListPanel.
+	 * @param cl ChangeListener for ListItem. The change listener is the ListPanel.
 	 */
 	public ListItemReservation(int resID, Reservation r, ChangeListener cl) {
 		super(resID);
 		this.cl = cl;
 		SimpleDateFormat sf = new SimpleDateFormat("MM/dd/YYYY");
 		setLayout(new GridLayout(2,2));
-		add(new JLabel("Room: "+r.getRoomID()));
+		add(new JLabel("Room: #"+(r.getRoomID()+1)));
 		add(new JLabel(""));
 		add(new JLabel("Check-in: "+sf.format(r.getStart().getTime())));
 		add(new JLabel("Check-out: "+sf.format(r.getEnd().getTime())));

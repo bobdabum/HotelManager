@@ -1,6 +1,10 @@
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+
+import javax.swing.JFrame;
 
 public class HotelManager {
 	/**
@@ -9,7 +13,13 @@ public class HotelManager {
 	 */
 	public static void main(String[] args) {
 		final RoomAndUserManager myManager = loadFromFile();
-		HotelFrame hf = new HotelFrame(myManager);
+		final JFrame frame = new JFrame("Hotel Manager");
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e){
+				myManager.saveAll();
+			}
+		});
+		HotelFrame hf = new HotelFrame(myManager, frame);
 		hf.run();
 	}
 	/**
@@ -28,7 +38,7 @@ public class HotelManager {
 		
 		try {
 			//read all users
-			in = new BufferedReader(new FileReader("userInfo.txt"));
+			in = new BufferedReader(new FileReader("userList.txt"));
 			String line = in.readLine();
 			int curResID = Integer.parseInt(line);
 			myManager = new RoomAndUserManager(roomList, curResID);
@@ -36,6 +46,7 @@ public class HotelManager {
 			line = in.readLine();
 			while(line!=null){
 				myManager.createUser(line);
+				line = in.readLine();
 			}
 			in.close();
 			
@@ -48,12 +59,13 @@ public class HotelManager {
 				int roomID = Integer.parseInt(strArray[0]);
 				int userID = Integer.parseInt(strArray[1]);
 				int resID = Integer.parseInt(strArray[2]);
-				String[] startArray = strArray[4].split("/");
-				String[] endArray = strArray[5].split("/");
-				GregorianCalendar start = new GregorianCalendar(Integer.parseInt(startArray[0]),Integer.parseInt(startArray[1]),Integer.parseInt(startArray[2]));
-				GregorianCalendar end = new GregorianCalendar(Integer.parseInt(endArray[0]),Integer.parseInt(endArray[1]),Integer.parseInt(endArray[2]));
+				String[] startArray = strArray[3].split("/");
+				String[] endArray = strArray[4].split("/");
+				GregorianCalendar start = new GregorianCalendar(Integer.parseInt(startArray[2]),Integer.parseInt(startArray[0])-1,Integer.parseInt(startArray[1]));
+				GregorianCalendar end = new GregorianCalendar(Integer.parseInt(endArray[2]),Integer.parseInt(endArray[0])-1,Integer.parseInt(endArray[1]));
 				
 				myManager.addReservationFromFile(start, end, roomID, userID, resID);
+				line = in.readLine();
 			}
 			in.close();
 		}

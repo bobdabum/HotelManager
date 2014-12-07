@@ -12,14 +12,16 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class UserControllerPanel extends JPanel{
 	private RoomAndUserManager myManager;
-
+	private UserFrame parent;
+	
 	/**
 	 * Constructor for Panel.
 	 * @param myManager
 	 */
-	public UserControllerPanel(RoomAndUserManager myManager){
+	public UserControllerPanel(RoomAndUserManager myManager, UserFrame parent){
 		this.myManager = myManager;
 		changeToUserLogin();
+		this.parent = parent;
 	}
 	
 	/**
@@ -30,6 +32,7 @@ public class UserControllerPanel extends JPanel{
 		setLayout(new GridLayout(2,3));
 		final JButton newUser = new JButton("Create new account");
 		final JButton exisUser = new JButton("Login to existing account");
+		final JButton exitUserFrame = new JButton("Exit to manager");
 
 		final JTextField infoField = new JTextField();
 		infoField.setVisible(false);
@@ -87,8 +90,13 @@ public class UserControllerPanel extends JPanel{
 				revalidate();
 				repaint();
 			}});
-
-		add(newUser);add(exisUser);add(new JLabel(""));
+		exitUserFrame.addActionListener(new ActionListener() {			
+			public void actionPerformed(ActionEvent arg0) {
+				parent.exitUser();
+			}
+		});
+		
+		add(newUser);add(exisUser);add(exitUserFrame);
 		add(desc);add(infoField);add(confirmButton);
 		revalidate();
 		repaint();

@@ -8,9 +8,9 @@ public class HotelFrame{
 	/**
 	 * The constructor for the view
 	 */
-	public HotelFrame(RoomAndUserManager m){
+	public HotelFrame(RoomAndUserManager m, JFrame frame){
 		this.m = m;
-		frame = new JFrame("Hotel Reservation");
+		this.frame = frame;
 		pane = frame.getContentPane();
 	}
 	
