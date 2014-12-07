@@ -4,13 +4,27 @@ import java.util.GregorianCalendar;
 
 import javax.swing.*;
 
+/**
+ * User controller panel is what the user interacts with to change between functionalities.
+ * @author Linye Ouyang
+ *
+ */
 @SuppressWarnings("serial")
 public class UserControllerPanel extends JPanel{
 	private RoomAndUserManager myManager;
+
+	/**
+	 * Constructor for Panel.
+	 * @param myManager
+	 */
 	public UserControllerPanel(RoomAndUserManager myManager){
 		this.myManager = myManager;
 		changeToUserLogin();
 	}
+	
+	/**
+	 * Changes to User login display.
+	 */
 	private void changeToUserLogin(){
 		removeAll();
 		setLayout(new GridLayout(2,3));
@@ -25,7 +39,6 @@ public class UserControllerPanel extends JPanel{
 		confirmButton.setVisible(false);
 
 		newUser.addActionListener(new ActionListener(){
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				//set other components to be visible.
 				desc.setText("Please enter your name:");
@@ -35,7 +48,6 @@ public class UserControllerPanel extends JPanel{
 				for(ActionListener a: confirmButton.getActionListeners())
 					confirmButton.removeActionListener(a);
 				confirmButton.addActionListener(new ActionListener(){
-					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						if(infoField.getText().length()>0)
 						{
@@ -51,7 +63,6 @@ public class UserControllerPanel extends JPanel{
 				repaint();
 			}});
 		exisUser.addActionListener(new ActionListener(){
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				//set other components to be visible
 				desc.setText("Please enter your user ID:");
@@ -61,7 +72,6 @@ public class UserControllerPanel extends JPanel{
 				for(ActionListener a: confirmButton.getActionListeners())
 					confirmButton.removeActionListener(a);
 				confirmButton.addActionListener(new ActionListener(){
-					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						try{
 							myManager.login(Integer.parseInt(infoField.getText()));
@@ -83,6 +93,10 @@ public class UserControllerPanel extends JPanel{
 		revalidate();
 		repaint();
 	}
+
+	/**
+	 * Changes to user option display.
+	 */
 	public void changeToUserOptions(){
 		removeAll();
 		setLayout(new FlowLayout());
@@ -99,8 +113,7 @@ public class UserControllerPanel extends JPanel{
 				changeToViewReservations();
 			}			
 		});
-		logOut.addActionListener(new ActionListener() {			
-			@Override
+		logOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				changeToUserLogin();
 			}
@@ -111,6 +124,10 @@ public class UserControllerPanel extends JPanel{
 		revalidate();
 		repaint();
 	}
+
+	/**
+	 * Changes to make reservation display.
+	 */
 	private void changeToMakeReservation(){
 		removeAll();
 		final JTextField startField = new JTextField();
@@ -166,12 +183,22 @@ public class UserControllerPanel extends JPanel{
 		revalidate();
 		repaint();
 	}
+
+	/**
+	 * Changes to reservation view display.
+	 */
 	private void changeToViewReservations(){
 		removeAll();
 		myManager.loadUserReservations();
 		revalidate();
 		repaint();
 	}
+
+	/**
+	 * Creates a GregorianCalendar from a date String.
+	 * @param date
+	 * @return
+	 */
 	private GregorianCalendar createCalendar(String date){
 		GregorianCalendar returnCal = null;
 		String[] startArray = date.split("/");

@@ -5,7 +5,7 @@ import javax.swing.*;
 
 /**
  * ListItem is an abstract class that ListPanel uses to populate itself.
- * @author My Pc
+ * @author Linye Ouyang
  *
  */
 @SuppressWarnings("serial")

@@ -7,6 +7,11 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 
+/**
+ * UserFrame the JFrame for the user.
+ * @author Linye Ouyang
+ *
+ */
 public class UserFrame implements RoomListener, ReservationListener{
 	final RoomAndUserManager myManager;	
 	final JFrame frame;
@@ -14,6 +19,12 @@ public class UserFrame implements RoomListener, ReservationListener{
 	final JPanel rightPanel;
 	final UserControllerPanel topPanel;
 	final JScrollPane listPanelContainer;
+	
+	/**
+	 * Initializes the frame for users.
+	 * @param myManager Data model.
+	 * @param frame Frame that contains everything.
+	 */
 	public UserFrame(RoomAndUserManager myManager, JFrame frame){
 		this.myManager = myManager;
 		this.frame = frame;
@@ -40,6 +51,10 @@ public class UserFrame implements RoomListener, ReservationListener{
 		myListPanel.setVisible(false);
 		rightPanel.setVisible(false);
 	}
+	
+	/**
+	 * Handles event when list of reservations are changed in the model.
+	 */
 	public void reservationsChanged(ChangeEvent e) {
 		//fill in list panel
 		myListPanel.clearList();
@@ -58,7 +73,6 @@ public class UserFrame implements RoomListener, ReservationListener{
 		//button removes selected reservation.
 		JButton cancelButton = new JButton("Cancel selected reservations");
 		cancelButton.addActionListener(new ActionListener(){
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				int toBeDeleted = myListPanel.getSelected();
 				myManager.removeReservation(toBeDeleted);
@@ -66,7 +80,6 @@ public class UserFrame implements RoomListener, ReservationListener{
 
 		JButton returnButton = new JButton("Return to user options");
 		returnButton.addActionListener(new ActionListener() {			
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				myListPanel.setVisible(false);
 				rightPanel.setVisible(false);
@@ -81,6 +94,10 @@ public class UserFrame implements RoomListener, ReservationListener{
 		rightPanel.revalidate();
 		rightPanel.repaint();
 	}
+
+	/**
+	 * Handles event when rooms are changed in the model.
+	 */
 	public void roomsChanged(ChangeEvent e) {
 		myListPanel.clearList();
 		ArrayList<Room> roomList = myManager.getAvailableRooms();
@@ -98,7 +115,6 @@ public class UserFrame implements RoomListener, ReservationListener{
 		JButton finishTransaction = new JButton("Finish Transaction");
 
 		confirmButton.addActionListener(new ActionListener(){
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(myListPanel.getSelected()!=-1){
 					myManager.addReservation(myListPanel.getSelected());
@@ -107,7 +123,6 @@ public class UserFrame implements RoomListener, ReservationListener{
 					RoomAndUserManager.throwDialogue(new Exception("No room selected!"), JOptionPane.ERROR_MESSAGE);
 			}});
 		finishTransaction.addActionListener(new ActionListener() {			
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(myManager.getReceiptList().size()>0){
 					rightPanel.removeAll();
@@ -135,9 +150,14 @@ public class UserFrame implements RoomListener, ReservationListener{
 		rightPanel.setVisible(true);
 		frame.repaint();
 	}
+
+	/**
+	 * Factory method for the create receipt button.
+	 * @param r Receipt Strategy implemented for the receipt created by the button.
+	 * @return
+	 */
 	private ActionListener receiptFactory(final ReceiptStrategy r){
 		return new ActionListener() {						
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				ReceiptFrame rf = new ReceiptFrame(r,myManager);
 				rf.draw();

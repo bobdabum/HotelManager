@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 /**
- * Strategy for receipt frame. Changes
+ * Implements comprehensive receipt for strategy.
  * @author My Pc
  *
  */

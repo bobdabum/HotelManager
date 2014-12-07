@@ -4,8 +4,18 @@ import java.text.SimpleDateFormat;
 
 import javax.swing.*;
 
+/**
+ * ListItem for Receipt
+ * @author My Pc
+ *
+ */
 @SuppressWarnings("serial")
 public class ListItemReceipt extends ListItem{
+	/**
+	 * Constructor for ListItemReceipt. ID does not matter for Receipt items.
+	 * @param r
+	 * @param position
+	 */
 		public ListItemReceipt(Reservation r,int position) {
 			super(position);
 			setPreferredSize(new Dimension(375,35));

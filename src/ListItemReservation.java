@@ -5,10 +5,20 @@ import javax.swing.JLabel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-
+/**
+ * ListItem for displaying reservations. Contains ChangeListener for mouse click events.
+ * @author Linye Ouyang
+ *
+ */
 @SuppressWarnings("serial")
 public class ListItemReservation extends ListItem{
 	private ChangeListener cl;
+	/**
+	 * Constructor for ListItem. ID of interest is the reservation ID.
+	 * @param resID
+	 * @param r
+	 * @param cl ChangeListener for ListItem. The change lsitener is the ListPanel.
+	 */
 	public ListItemReservation(int resID, Reservation r, ChangeListener cl) {
 		super(resID);
 		this.cl = cl;
@@ -20,6 +30,9 @@ public class ListItemReservation extends ListItem{
 		add(new JLabel("Check-out: "+sf.format(r.getEnd().getTime())));
 		setOpaque(true);
 	}
+	/**
+	 * Overrides super class method. Changes panel color when the panel is selected.
+	 */
 	@Override
 	protected void onClicked(){
 		super.onClicked();

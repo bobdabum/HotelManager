@@ -81,6 +81,7 @@ public class RoomAndUserManager {
 		}
 		return numDays;
 	}
+
 	/**
 	 * Updates the reservationList filtered by day selected.
 	 * @param day The date of interest.
@@ -97,13 +98,18 @@ public class RoomAndUserManager {
 	}
 
 	/**
-	 * Updates reservationList filtered by userID.
+	 * Loads the current user's reservations for consumption by MVC.
 	 * @param userID
 	 */
 	public void loadUserReservations(){
 		reservationList = currentUser.getUserReservations();
 		notifyReservationListeners();
 	}
+
+	/**
+	 * Gets current user Reservations.
+	 * @return the ArrayList of reservations.
+	 */
 	public ArrayList<Reservation> getCurrentUserReservations(){
 		return currentUser.getUserReservations();
 	}
@@ -118,6 +124,12 @@ public class RoomAndUserManager {
 		userList.add(currentUser);
 		return userList.size()-1;
 	}
+
+	/**
+	 * Sets the current user to the one specified by the user ID.
+	 * @param userID Identifier for the user.
+	 * @throws Exception Returns exception if user can not be found.
+	 */
 	public void login(int userID) throws Exception{
 		if(userID < userList.size() && userID>=0){
 			currentUser = userList.get(userID);
@@ -125,13 +137,10 @@ public class RoomAndUserManager {
 		else
 			throw new Exception("Can not find User ID");
 	}
+
 	/**
-	 * Adds reservation to both user and room. Throws error if input parameters are invalid.
-	 * @param start
-	 * @param end
+	 * Adds a reservation specified by the room id.
 	 * @param roomID
-	 * @param user
-	 * @throws Exception
 	 */
 	public void addReservation(int roomID){
 		int userID = currentUser.getUserID();
@@ -156,6 +165,15 @@ public class RoomAndUserManager {
 		//add to receiptList.
 		receiptList.add(temp);
 	}
+
+	/**
+	 * Adds reservations to model from file.
+	 * @param start Start date.
+	 * @param end End date.
+	 * @param roomID Room ID.
+	 * @param userID User ID.
+	 * @param resID Reservation ID.
+	 */
 	public void addReservationFromFile(GregorianCalendar start, GregorianCalendar end, int roomID, int userID, int resID){
 		Reservation temp = new Reservation(start,end,roomID,roomList.get(roomID).getRoomCost(),
 				userID,userList.get(userID).getName(), resID);
@@ -163,54 +181,101 @@ public class RoomAndUserManager {
 		userList.get(userID).addReservation(temp);
 		roomList.get(roomID).addReservation(temp);		
 	}
+
+	/**
+	 * Removes reservation specified by the reservation ID.
+	 * @param reservationID
+	 */
 	public void removeReservation(int reservationID){
 		Reservation removedReservation = currentUser.removeReservation(reservationID);
 		if(removedReservation!=null)
 			roomList.get(removedReservation.getRoomID()).removeReservation(reservationID);
 		notifyReservationListeners();
 	}
+
 	/**
-	 * Attach ChangeListener to listener array
+	 * Attach RoomListener to listener array
 	 * @param c 
 	 */
 	public void attachRoomListener(RoomListener c)
 	{
 		roomListeners.add(c);
 	}
+
+	/**
+	 * Attach ReservationListener to listener array.
+	 * @param c
+	 */
 	public void attachReservationListener(ReservationListener c)
 	{
 		reservationListeners.add(c);
 	}
+
+	/**
+	 * Notifies all RoomListeners.
+	 */
 	private void notifyRoomListeners(){
 		//inform listeners
 		for(RoomListener l:roomListeners){
 			l.roomsChanged(new ChangeEvent(this));
 		}		
 	}
+
+	/**
+	 * Notifies all Reservation Listeners.
+	 */
 	private void notifyReservationListeners(){
 		//inform listeners
 		for(ReservationListener l:reservationListeners){
 			l.reservationsChanged(new ChangeEvent(this));
 		}		
 	}
+
+	/**
+	 * Returns reservations of interest. 
+	 * @return
+	 */
 	public ArrayList<Reservation> getReservationList() {
 		return reservationList;
 	}
+
+	/**
+	 * Returns receipts of interest.
+	 * @return
+	 */
 	public ArrayList<Reservation> getReceiptList(){
 		return receiptList;
 	}
+
+	/**
+	 * Returns all reservations reserved
+	 */
 	public void clearReceipt(){
 		receiptList.clear();
 	}
+	/**
+	 * Returns rooms of interest.
+	 * @return
+	 */
 	public ArrayList<Room> getAvailableRooms() {
 		return availableRooms;
 	}
+	
+	/**
+	 * Method used for catching exceptions throw during the execution of the program.
+	 * @param e
+	 * @param optionPaneType
+	 */
 	public static void throwDialogue(Exception e, int optionPaneType){
 		JOptionPane.showMessageDialog(null,
 				e.getMessage(),
 				"Message",
 				optionPaneType);
 	}
+
+	/**
+	 * Saves to file.
+	 */
 	public void saveAll(){
 		try{
 			File userFile = new File("userList.txt");
@@ -236,7 +301,7 @@ public class RoomAndUserManager {
 			reservationWriter.close();
 		}
 		catch(IOException e){
-			
+
 		}
 	}
 }

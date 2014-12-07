@@ -1,13 +1,27 @@
 import java.util.ArrayList;
 import javax.swing.*;
 
+/**
+ * Receipt frame is called when user wishes to see the user reservations. 
+ * @author My Pc
+ *
+ */
 public class ReceiptFrame {
 	private ReceiptStrategy rs;
 	private RoomAndUserManager myManager;
+	
+	/**
+	 * Constructor determines the strategy to be used in the frame.
+	 * @param rs ReceiptStrategy determines the type of Receipt drawn.
+	 * @param myManager Model class.
+	 */
 	public ReceiptFrame(ReceiptStrategy rs, RoomAndUserManager myManager){
 		this.rs = rs;
 		this.myManager = myManager;
 	}
+	/**
+	 * Draws the JFrame.
+	 */
 	public void draw(){
 		JFrame frame = new JFrame();
 		ArrayList<Reservation> myList = rs.getList(myManager);
@@ -18,7 +32,7 @@ public class ReceiptFrame {
 			total+=r.getRoomCost().getCost();
 		}
 		frame.getContentPane().setBounds(0,0,375,500);
-		lp.populateList(new ListItemReceiptSum(null, total, 0));
+		lp.populateList(new ListItemReceiptSum(total, 0));
 		JScrollPane listPanelContainer = new JScrollPane(lp);
 		frame.add(listPanelContainer);
 		frame.pack();

@@ -1,9 +1,19 @@
 import java.awt.GridLayout;
 import javax.swing.JLabel;
 
+/**
+ * List Item for receipt sum
+ * @author My Pc
+ *
+ */
 @SuppressWarnings("serial")
 public class ListItemReceiptSum extends ListItem {
-		public ListItemReceiptSum(Reservation myItem, int total, int position) {
+	/**
+	 * Constructor for Class
+	 * @param total
+	 * @param position ID for superclass.
+	 */
+		public ListItemReceiptSum(int total, int position) {
 			super(position);
 			setLayout(new GridLayout(1,2));
 			add(new JLabel("Total Cost:"));
