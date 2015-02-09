@@ -6,6 +6,11 @@ import java.util.GregorianCalendar;
 
 import javax.swing.JFrame;
 
+/**
+ * Contains main method.
+ * @author Ji Hoon Yoon
+ *
+ */
 public class HotelManager {
 	/**
 	 * Runs the program.

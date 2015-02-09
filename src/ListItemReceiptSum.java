@@ -3,7 +3,7 @@ import javax.swing.JLabel;
 
 /**
  * List Item for receipt sum
- * @author My Pc
+ * @author Linye Ouyang
  *
  */
 @SuppressWarnings("serial")

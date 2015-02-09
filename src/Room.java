@@ -2,7 +2,7 @@ import java.util.*;
 
 /**
  * Room data model.
- * @author My Pc
+ * @author Linye Ouyang
  *
  */
 public class Room {

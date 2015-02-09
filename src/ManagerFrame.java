@@ -8,6 +8,11 @@ import javax.swing.table.*;
 
 import java.text.*;
 
+/**
+ * Manages everything for Manager view.
+ * @author Ji Hoon Yoon
+ *
+ */
 public class ManagerFrame{
 	/**
 	 * creates the Frame with the calendar and Manager options

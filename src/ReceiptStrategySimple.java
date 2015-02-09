@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 /**
  * Implements simple Receipt for the strategy.
- * @author My Pc
+ * @author Linye Ouyang
  *
  */
 public class ReceiptStrategySimple implements ReceiptStrategy {

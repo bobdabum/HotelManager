@@ -1,7 +1,7 @@
 import java.util.*;
 /**
  * Data model for reservation.
- * @author My Pc
+ * @author Linye Ouyang
  *
  */
 public class Reservation implements Comparable<Reservation>{

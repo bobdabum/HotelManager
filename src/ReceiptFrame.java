@@ -3,7 +3,7 @@ import javax.swing.*;
 
 /**
  * Receipt frame is called when user wishes to see the user reservations. 
- * @author My Pc
+ * @author Linye Ouyang
  *
  */
 public class ReceiptFrame {

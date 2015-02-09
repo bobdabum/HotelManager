@@ -3,6 +3,11 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+/**
+ * Hotel Frame is the starting frame for the user.
+ * @author Ji Hoon Yoon
+ *
+ */
 public class HotelFrame{
 	
 	/**

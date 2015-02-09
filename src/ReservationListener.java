@@ -2,7 +2,7 @@ import javax.swing.event.ChangeEvent;
 
 /**
  * Listener for reservation changes for MVC pattern.
- * @author My Pc
+ * @author Linye Ouyang
  *
  */
 public interface ReservationListener {

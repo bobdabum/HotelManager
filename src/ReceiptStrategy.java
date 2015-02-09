@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 /**
  * Interface for the Receipt Strategy.
- * @author My Pc
+ * @author Linye Ouyang
  *
  */
 public interface ReceiptStrategy {

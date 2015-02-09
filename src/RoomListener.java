@@ -2,7 +2,7 @@ import javax.swing.event.ChangeEvent;
 
 /**
  * Interface for room listeners.
- * @author My Pc
+ * @author Linye Ouyang
  *
  */
 public interface RoomListener {

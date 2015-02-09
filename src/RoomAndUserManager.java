@@ -5,7 +5,11 @@ import java.util.*;
 import javax.swing.JOptionPane;
 import javax.swing.event.*;
 
-
+/**
+ * Manages both room and user lists. Is the model in the MVC design pattern.
+ * @author Linye Ouyang
+ *
+ */
 public class RoomAndUserManager {
 	//userList and roomList are core data models.
 	private ArrayList<Room> roomList;

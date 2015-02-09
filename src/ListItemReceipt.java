@@ -6,7 +6,7 @@ import javax.swing.*;
 
 /**
  * ListItem for Receipt
- * @author My Pc
+ * @author Linye Ouyang
  *
  */
 @SuppressWarnings("serial")

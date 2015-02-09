@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 /**
  * Implements comprehensive receipt for strategy.
- * @author My Pc
+ * @author Linye Ouyang
  *
  */
 public class ReceiptStrategyComprehensive implements ReceiptStrategy {

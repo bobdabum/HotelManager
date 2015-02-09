@@ -8,7 +8,7 @@ import javax.swing.event.ChangeListener;
 
 /**
  * Container for ListItem.
- * @author My Pc
+ * @author Linye Ouyang
  *
  */
 @SuppressWarnings("serial")
@@ -54,7 +54,6 @@ public class ListPanel extends JPanel implements ChangeListener{
 	 * Unselects every ListItem except the one specified by the ChangeEvent.
 	 * @param e
 	 */
-	@Override
 	public void stateChanged(ChangeEvent e) {
 		ListItem source = (ListItem) e.getSource();
 		for(ListItem li:myListItems){
